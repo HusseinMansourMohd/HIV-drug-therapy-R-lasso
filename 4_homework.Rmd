@@ -4,6 +4,7 @@ subtitle: ''
 output: html_document
 ---
 
+
 # Introduction
 
 A major issue with antiretroviral drugs is the mutation of the virus' genes.  Because of its high rate of replication ($10^9$ to $10^{10}$ virus per person per day) and error-prone
@@ -34,7 +35,8 @@ What are n and p in this problem?
 
 #### Answer 1.1.1.
 ```{r}
-####
+p = ncol(X)
+n = nrow(X)
 ```
 
 The number of observations is `r n` and the number of features is `r p`.
@@ -42,6 +44,11 @@ The number of observations is `r n` and the number of features is `r p`.
 #### Answer 1.1.2.
 
 What are the features in this problem?  What are the observations? What is the supervisor? What do larger values for the supervisor indicate in terms of susceptibility?
+
+features are 208 types of gens.
+Observations are each virus.
+Supervisor is the susceptibility of the virus to get treatmented.
+larger values for the supervisor indicate that the larger the value the less susceptible the virus is.
 
 
 # Problem 2 (10 pts)
