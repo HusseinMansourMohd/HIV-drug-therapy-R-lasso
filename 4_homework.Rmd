@@ -193,7 +193,7 @@ YhatTestRidge = predict(ridgeOut, Xtest, s = 'lambda.min')
 
 Why is a boundary solution for minimizing CV an issue?
 
- he left-most dotted vertical line occurs at the CV minimum and the right-most dotted vertical line is the largest value of lambda such that CV(lambda) is within one standard error of CV(lamda-hat) which is in this case `r ridgeOut$lambda.1se`.Also The issue here is that the  automatic lambda grid values allocated by glmnet is not  good because sometimes the grid values are too far apart near the minimum or the grid doesn’t allow small/large enough lambda values.so we don’t know what the solution would have been if the grid contained smaller values. 
+the left-most dotted vertical line occurs at the CV minimum and the right-most dotted vertical line is the largest value of lambda such that CV(lambda) is within one standard error of CV(lamda-hat) which is in this case `r ridgeOut$lambda.1se`.Also The issue here is that the  automatic lambda grid values allocated by glmnet is not  good because sometimes the grid values are too far apart near the minimum or the grid doesn’t allow small/large enough lambda values.so we don’t know what the solution would have been if the grid contained smaller values. 
 
 
 ### Problem 4.2.2. Lasso
