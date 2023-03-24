@@ -62,7 +62,7 @@ table(X)
 #### Answer 2.1
 
 What do these results indicate?
-
+It means that the only values in the feature matrix either 0 or 1 and we have 10843 genetic mutation and 135589 non-mutation across the given data.
 
 # Problem 3 (10 pts)
 
@@ -77,6 +77,7 @@ hist(Y)
 
 What do these results indicate? (Note that even though the supervisor doesn't look symmetric, we will still apply elastic net to it, as did the authors in that paper I included.  We won't consider further transformations of the supervisor)
 
+The histogram is clearly shows that the supervisors (Y) has  a peak at higher values so we can say that many viruses are more resistance to treatment. the graph looks skewed and around half of the supervisors have a value grater than 2.
 
 # Problem 4 (70 pts)
 
