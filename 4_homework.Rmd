@@ -1,6 +1,6 @@
 ---
 title: "STAT656: Homework 4"
-subtitle: ''
+subtitle: 'Hussein Mansour Mohamed Mansour UIN: 633003079'
 output: html_document
 ---
 
@@ -105,8 +105,9 @@ Now, find the CV minimizing lasso solution
 ```{r}
 require(glmnet)
 lassoOut     = cv.glmnet(X ,Y, alpha=1, standardize = FALSE) #Consider why we wouldn't standardize
-betaHatLasso = ####
-Slasso       = ####
+best_lambda  = lassoOut$lambda.min
+betaHatLasso = coef(lassoOut,s=best_lambda)
+Slasso       = which(abs(betaHatLasso) > 1e-16)
 ```
 
 ### Problem 4.1.2.  Refitted lasso
@@ -117,11 +118,12 @@ Now, find the refitted lasso using the '1 standard error rule' lambda and refitt
 
 ```{r}
 plot(lassoOut)
-betaHatTemp     = ####
-Srefitted       = ####
+betaHatTemp     = coef(lassoOut,s='lambda.1se')[-1]
+Srefitted       = which(abs(betaHatTemp) > 1e-16)
 Xdf             = as.data.frame(X[,Srefitted])
-refittedOut     = ####
-betaHatRefitted = ####
+refittedOut     = lm(Y~ ., data = Xdf)
+betaHatRefitted = refittedOut$coefficients
+betaHatRefitted
 ```
 
 #### Answer 4.1.3
@@ -130,7 +132,7 @@ What are the genes selected by the refitted lasso (that is, what are the 'geneLa
 
 ```{r}
 cat('The selected genes from refitted lasso are: \n',
-     ####,'\n')
+     geneLabels[Srefitted],'\n')
 ```
 
 ### Problem 4.1.4
@@ -140,14 +142,14 @@ For the refitted lasso, which gene is associated with the largest DECREASE in vi
 #### Answer 4.1.4
 
 ```{r}
-####
+cat('The gene is :', names(betaHatRefitted[which.max(betaHatRefitted)]) , 'The susceptibility is : ', max(betaHatRefitted), '\n')
 ```
 
 #### Answer 4.1.5
 
 Interpret this estimated coefficient within the context of the problem
 
-'A change from no mutation to mutation is....'
+'A change from no mutation to mutation for the above gene (P184) is associated with decrease in viral susceptibility by `r max(betaHatRefitted)` on average holding other features constant.
 
 
 ## Problem 4.2. Prediction
@@ -191,6 +193,7 @@ YhatTestRidge = predict(ridgeOut, Xtest, s = 'lambda.min')
 
 Why is a boundary solution for minimizing CV an issue?
 
+ he left-most dotted vertical line occurs at the CV minimum and the right-most dotted vertical line is the largest value of lambda such that CV(lambda) is within one standard error of CV(lamda-hat) which is in this case `r ridgeOut$lambda.1se`.Also The issue here is that the  automatic lambda grid values allocated by glmnet is not  good because sometimes the grid values are too far apart near the minimum or the grid doesn’t allow small/large enough lambda values.so we don’t know what the solution would have been if the grid contained smaller values. 
 
 
 ### Problem 4.2.2. Lasso
@@ -199,7 +202,7 @@ We can use the previously computed lasso object to get the predictions
 
 
 ```{r}
-####
+YhatTestLasso = predict(lassoOut, Xtest, s = 'lambda.min')
 ```
 
 #### Answer 4.2.3. Refitted lasso 
@@ -207,7 +210,11 @@ We can use the previously computed lasso object to get the predictions
 Get the predictions for the refitted lasso.  Remember, choose lambda via the 1se rule and then fit the least squares solution on the selected features.  
 
 ```{r}
-YhatTestRefitted = ####
+betaHatTemp      = coef(lassoOut,s='lambda.1se')[-1]
+Srefitted        = which(abs(betaHatTemp) > 1e-16)
+XtestDF          = as.data.frame(Xtest[,Srefitted])
+refittedOut      = lm(Y~ ., data = Xdf)
+YhatTestRefitted = predict(refittedOut , XtestDF)
 ```
 
 
@@ -215,9 +222,9 @@ YhatTestRefitted = ####
 
 ```{r}
 # Get the test error
-testErrorRidge    = mean(####)
-testErrorLasso    = ####
-testErrorRefitted = ####
+testErrorRidge    = mean((Ytest-YhatTestRidge)**2)
+testErrorLasso    = mean((Ytest-YhatTestLasso)**2)
+testErrorRefitted = mean((Ytest-YhatTestRefitted)**2)
 ```
 
 
